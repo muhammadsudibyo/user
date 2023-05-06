@@ -3,6 +3,7 @@ package com.ecommerce.user.controller;
 import com.ecommerce.user.model.User;
 import com.ecommerce.user.repo.UserRepo;
 import com.ecommerce.user.util.AccountNumberGenerator;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -39,8 +40,25 @@ public class RestUserController {
     @ResponseStatus(HttpStatus.OK)
     public User addUser(@RequestBody User user){
         String temp = AccountNumberGenerator.generate();
+        String hashPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+        user.setPassword(hashPassword);
         user.setAccountNo(temp);
         user.setDeleteFlag("N");
+        user.setRole("user");
+        user.setEnabled(true);
+        return userRepo.save(user);
+    }
+
+    @PostMapping("/addAdmin")
+    @ResponseStatus(HttpStatus.OK)
+    public User addAdmin(@RequestBody User user){
+        String temp = AccountNumberGenerator.generate();
+        String hashPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+        user.setPassword(hashPassword);
+        user.setAccountNo(temp);
+        user.setDeleteFlag("N");
+        user.setRole("user");
+        user.setEnabled(true);
         return userRepo.save(user);
     }
 
