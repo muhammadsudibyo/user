@@ -35,4 +35,9 @@ public class User {
     @Column(name = "is_delete")
     private String deleteFlag;
 
+    @Column(name = "role")
+    private String role;
+
+    @Column(name = "enabled")
+    private boolean enabled;
 }
