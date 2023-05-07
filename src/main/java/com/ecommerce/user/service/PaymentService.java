@@ -5,7 +5,6 @@ import com.ecommerce.user.model.AccountMaster;
 import com.ecommerce.user.model.PayTxnDTO;
 import com.ecommerce.user.model.User;
 import com.ecommerce.user.repo.AccountMasterRepo;
-import com.ecommerce.user.repo.PaymentRepo;
 import com.ecommerce.user.repo.UserRepo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,8 +19,6 @@ import java.math.BigDecimal;
 @Service
 public class PaymentService {
 
-    @Autowired
-    PaymentRepo paymentRepo;
 
     @Autowired
     UserRepo userRepo;
@@ -40,10 +37,11 @@ public class PaymentService {
             return "failed";
         }
         user.setBalance(user.getBalance().subtract(totalTxn));
+        userRepo.save(user);
 
         AccountMaster accountMaster = accountMasterRepo.findAccountMasterByAccountNo("00000000001");
         accountMaster.setBalance(accountMaster.getBalance().add(totalTxn));
-
+        accountMasterRepo.save(accountMaster);
         return "Success";
     }
 

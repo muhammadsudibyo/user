@@ -1,6 +1,7 @@
 package com.ecommerce.user.controller;
 
 import com.ecommerce.user.model.User;
+import com.ecommerce.user.repo.AccountMasterRepo;
 import com.ecommerce.user.repo.UserRepo;
 import com.ecommerce.user.util.AccountNumberGenerator;
 import org.mindrot.jbcrypt.BCrypt;
@@ -16,6 +17,9 @@ import java.util.List;
 public class RestUserController {
     @Autowired
     UserRepo userRepo;
+
+    @Autowired
+    AccountMasterRepo masterRepo;
 
     //Get ALl User
     @GetMapping("/all")
@@ -105,6 +109,11 @@ public class RestUserController {
         if(existUser != null && existUser.getDeleteFlag().equals("Y")){
             userRepo.deleteById(existUser.getId());
         }
+    }
+
+    @GetMapping("/master")
+    @ResponseStatus(HttpStatus.OK)
+    public List getMasterAccount(){ return masterRepo.findAll();
     }
 
 }
