@@ -90,11 +90,20 @@ public class RestUserController {
     //Soft delete
     @PutMapping("/delete/{username}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteUser(@PathVariable("username") String username){
+    public void softDeleteUser(@PathVariable("username") String username){
         User existUser = userRepo.findUserByUsername(username);
         if(existUser != null){
             existUser.setDeleteFlag("Y");
             userRepo.save(existUser);
+        }
+    }
+
+    @DeleteMapping("/hard/delete/{username}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteUser(@PathVariable("username") String username){
+        User existUser = userRepo.findUserByUsername(username);
+        if(existUser != null && existUser.getDeleteFlag().equals("Y")){
+            userRepo.deleteById(existUser.getId());
         }
     }
 
